@@ -12,9 +12,6 @@ CREATE TABLE IF NOT EXISTS promotions (
   created_at TIMESTAMP DEFAULT NOW(),
   expires_at TIMESTAMP NOT NULL,
   completed_at TIMESTAMP,
-  INDEX(author_id),
-  INDEX(status),
-  INDEX(expires_at)
 );
 
 -- 投放队列表
@@ -28,11 +25,7 @@ CREATE TABLE IF NOT EXISTS promotion_queue (
   created_at TIMESTAMP DEFAULT NOW(),
   cancelled_at TIMESTAMP,
   cancellation_reason VARCHAR(255),
-  FOREIGN KEY (promotion_id) REFERENCES promotions(id),
-  INDEX(promotion_id),
-  INDEX(user_id),
-  INDEX(scheduled_delivery),
-  INDEX(status)
+  FOREIGN KEY (promotion_id) REFERENCES promotions(id)
 );
 
 -- 推广费用支出表
@@ -43,11 +36,7 @@ CREATE TABLE IF NOT EXISTS promotion_expenses (
   action_type VARCHAR(50) NOT NULL, -- 'view', 'click', 'like', 'comment', 'share', 'unlock', 'follow'
   cost DECIMAL(8,4) NOT NULL,
   created_at TIMESTAMP DEFAULT NOW(),
-  FOREIGN KEY (promotion_id) REFERENCES promotions(id),
-  INDEX(promotion_id),
-  INDEX(user_id),
-  INDEX(action_type),
-  INDEX(created_at)
+  FOREIGN KEY (promotion_id) REFERENCES promotions(id)
 );
 
 -- 退还任务表
@@ -60,10 +49,7 @@ CREATE TABLE IF NOT EXISTS refund_tasks (
   status VARCHAR(50) DEFAULT 'scheduled', -- 'scheduled', 'completed', 'failed'
   created_at TIMESTAMP DEFAULT NOW(),
   processed_at TIMESTAMP,
-  FOREIGN KEY (promotion_id) REFERENCES promotions(id),
-  INDEX(promotion_id),
-  INDEX(refund_date),
-  INDEX(status)
+  FOREIGN KEY (promotion_id) REFERENCES promotions(id)
 );
 
 -- 推广投放记录表 (用于频次控制和效果统计)
@@ -74,11 +60,7 @@ CREATE TABLE IF NOT EXISTS promotion_deliveries (
   post_id UUID NOT NULL,
   delivered_at TIMESTAMP DEFAULT NOW(),
   context JSONB, -- 投放上下文 (位置、时间等)
-  FOREIGN KEY (promotion_id) REFERENCES promotions(id),
-  INDEX(promotion_id),
-  INDEX(user_id),
-  INDEX(post_id),
-  INDEX(delivered_at)
+  FOREIGN KEY (promotion_id) REFERENCES promotions(id)
 );
 
 -- 用户推广频次统计表 (用于体验保护)
@@ -89,9 +71,7 @@ CREATE TABLE IF NOT EXISTS user_promotion_stats (
   last_promotion_date DATE,
   total_promotions_received INTEGER DEFAULT 0,
   avg_engagement_rate DECIMAL(5,4) DEFAULT 0,
-  updated_at TIMESTAMP DEFAULT NOW(),
-  INDEX(daily_promotion_count),
-  INDEX(last_promotion_date)
+  updated_at TIMESTAMP DEFAULT NOW()
 );
 
 -- 创建索引优化查询性能

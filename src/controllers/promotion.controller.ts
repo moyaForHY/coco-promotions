@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express'
 import { z } from 'zod'
+import crypto from 'crypto'
+import { query } from '../db.js'
 import { PromotionOptimizerService } from '../services/promotion-optimizer.service.js'
 import { PricingStrategyService } from '../services/pricing-strategy.service.js'
 import { TargetingEngineService } from '../services/targeting-engine.service.js'
